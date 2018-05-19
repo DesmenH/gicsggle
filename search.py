@@ -5,7 +5,7 @@ import json
 def loadDict(inputDictPath):
     with open(inputDictPath, 'r') as dict:
         searchMap = json.load(dict)
-        print "searchMap is a data type of: " + type(searchMap)
+        print "searchMap is a data type of: %s " % (type(searchMap))
         dict.close()
         return searchMap
 

@@ -57,22 +57,23 @@ for key in bookkeeping:
 
         if loopCounter == 1:
         	break
+        html_file.close()
 
-    html_file.close()
+    f.close()
 
-f.close()
-
-#create an output file: test.txt
-#test.txt will have all text inside in html file
+#create an output file: dictionary.json
+#dictionary.json will be the dictionary we search from
 with open('dictionary.json', 'w+') as output:
-    #sorting dictionary
-    #for a in sorted(indexDic):
-        #print >> output, (a,':',indexDic[a])
-        #index = "%s , %s" % (a, indexDic[a])
-        #print >> output, (index.encode('utf-8'))
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
 
+
+#------old code------
+#sorting dictionary
+#for a in sorted(indexDic):
+    #print >> output, (a,':',indexDic[a])
+    #index = "%s , %s" % (a, indexDic[a])
+    #print >> output, (index.encode('utf-8'))
 
 
 
