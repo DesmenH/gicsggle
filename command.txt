@@ -1,0 +1,17 @@
+Common git commandline commands:
+
+To get updates from github server:
+git pull
+
+To update github server:
+1. git add <filename>
+2. git commint -m "message"
+3. git push
+
+Note: a message is necessary to commit 
+
+To check status:
+git status
+
+For git command list:
+git
