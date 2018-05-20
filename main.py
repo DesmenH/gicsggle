@@ -8,6 +8,7 @@ def main():
 
     #prompt user for input
     searchInput = raw_input("Gicsggle Search: ")
+    searchInput = searchInput.lower()
 
     #for printing searchMap
     #for a in searchMap:
