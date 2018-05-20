@@ -51,11 +51,14 @@ for key in bookkeeping:
         	#indexDic  KEY = signal token | VALUE = key in bookkeeping(ex:13/481)
             if key not in indexDic[t]:
                 indexDic[t].append(key)
-        	#print indexDic
 
         print currentPath
 
+<<<<<<< HEAD
         if loopCounter == 2000:
+=======
+        if loopCounter == 200:
+>>>>>>> b87af0375da8ebdce42eaff352b01c12a9e0411f
         	break
         html_file.close()
 
@@ -74,6 +77,7 @@ print ('c. The total size (in KB) of index on disk: ' + 'manually check')
 with open('dictionary.json', 'w+') as output:
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
+
 
 
 #------old code------
