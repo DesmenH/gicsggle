@@ -9,7 +9,7 @@ def loadDict(inputDictPath):
         dict.close()
         return searchMap
 
-def searchDict(term, dict, addressMap):
+def searchDict(term, dict, addressMap, kvalue):
     if term in dict:
         addressList = dict[term]  #addressList is a list of all address from bookkeeping
 
@@ -19,10 +19,16 @@ def searchDict(term, dict, addressMap):
             bookkeeping_file.close()
         
         #traverse list of paths found -> inside bookkeeping.json
-        print ("%s results found \n") % len(addressList)
+        print ("%s results found") % len(addressList)
+        print ("%s results shown \n") % kvalue
+        
+        counter = 0
         for address in addressList:
             print (addressDict[address])
             print (" ")
+            counter += 1
+            if counter == kvalue:
+                break
     else:
         printUnfound()
      

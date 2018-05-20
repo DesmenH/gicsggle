@@ -14,7 +14,7 @@ def main():
     #    print "%s , %s" % (a, searchMap[a])
 
     #search for term
-    search.searchDict(searchInput, searchMap, "bookkeeping.json")
+    search.searchDict(searchInput, searchMap, "bookkeeping.json", 5)
 
 #main check
 if __name__ == "__main__":

@@ -15,3 +15,9 @@ git status
 
 For git command list:
 git
+
+For see unpushed commits:
+git log origin/master..HEAD
+
+To delete unpush commits:  Note - number behind ~ indicate how many commits to revert
+git reset --soft HEAD~2
