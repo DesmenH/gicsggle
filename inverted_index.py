@@ -52,17 +52,10 @@ for key in bookkeeping:
             if key not in indexDic[t]:
                 indexDic[t].append(key)
 
-        print currentPath
-
-<<<<<<< HEAD
-        if loopCounter == 2000:
-=======
         if loopCounter == 200:
->>>>>>> b87af0375da8ebdce42eaff352b01c12a9e0411f
         	break
-        html_file.close()
-
-    f.close()
+    html_file.close()
+f.close()
 
 tokenNumber = len(indexDic.keys())
 
