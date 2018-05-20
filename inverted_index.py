@@ -41,7 +41,7 @@ for key in bookkeeping:
 
         #remove punctuation
         translate_table = dict((ord(char), None) for char in string.punctuation)
-        words = words.translate(translate_table).lower()
+        words = words.translate(translate_table).lower() #lowercase
 
         #tokenization
         tokens = [t for t in words.split()]
@@ -59,6 +59,7 @@ f.close()
 
 tokenNumber = len(indexDic.keys())
 
+#report
 print ('a. Number of documents of the corpus: ' + str(loopCounter))
 print ('b. Number of [unique] tokens present in the index: ' + str(tokenNumber))
 print ('c. The total size (in KB) of index on disk: ' + 'manually check')
