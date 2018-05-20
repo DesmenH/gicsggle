@@ -12,8 +12,8 @@ mergedList = []
 loopCounter = 0
 
 #path for windows, comment this and create new path for mac
-#bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
-bookkeepingPath = '/Users/wang/Desktop/2018 Spring/CS 121 Information Retrieval/Homework/Assignment 3/WEBPAGES_RAW/'
+bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
+#bookkeepingPath = '/Users/wang/Desktop/2018 Spring/CS 121 Information Retrieval/Homework/Assignment 3/WEBPAGES_RAW/'
 
 #reading from bookkeeping json
 with open(bookkeepingPath + 'bookkeeping.json', 'r') as f:
@@ -52,7 +52,7 @@ for key in bookkeeping:
             if key not in indexDic[t]:
                 indexDic[t].append(key)
 
-        if loopCounter == 200:
+        if loopCounter == 2000:
         	break
     html_file.close()
 f.close()
