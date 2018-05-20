@@ -51,11 +51,10 @@ for key in bookkeeping:
         	#indexDic  KEY = signal token | VALUE = key in bookkeeping(ex:13/481)
             if key not in indexDic[t]:
                 indexDic[t].append(key)
-        	#print indexDic
 
         print currentPath
 
-        if loopCounter == 1:
+        if loopCounter == 200:
         	break
         html_file.close()
 
@@ -66,6 +65,7 @@ for key in bookkeeping:
 with open('dictionary.json', 'w+') as output:
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
+
 
 
 #------old code------

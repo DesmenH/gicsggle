@@ -9,19 +9,29 @@ def loadDict(inputDictPath):
         dict.close()
         return searchMap
 
-#input: term and dictionary to search term in
-#output: found: value of term in dict if found
-#    not found: Your search - %s - did not match any documents...
-def searchDict(term, dict):
+def searchDict(term, dict, addressMap):
     if term in dict:
-        print dict[term]
+        addressList = dict[term]  #addressList is a list of all address from bookkeeping
+
+        #open bookkeeping to search for url
+        with open(addressMap, 'r') as bookkeeping_file:
+            addressDict = json.load(bookkeeping_file, object_pairs_hook = OrderedDict)
+            bookkeeping_file.close()
+        
+        #traverse list of paths found -> inside bookkeeping.json
+        print ("%s results found \n") % len(addressList)
+        for address in addressList:
+            print (addressDict[address])
+            print (" ")
     else:
+        printUnfound()
+     
+def printUnfound():
         print "Your search - %s - did not match any documents." % term
         print "\n Suggestions: \n"
         print "  - Make sure all words are spelled correctly."
         print "  - Try different keywords."
         print "  - Try more general keywords."
         print "  - Try fewer keywords."
-    
-    
+
 

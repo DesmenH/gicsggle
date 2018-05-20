@@ -9,11 +9,12 @@ def main():
     #prompt user for input
     searchInput = raw_input("Gicsggle Search: ")
 
+    #for printing searchMap
     #for a in searchMap:
     #    print "%s , %s" % (a, searchMap[a])
 
     #search for term
-    search.searchDict(searchInput, searchMap)
+    search.searchDict(searchInput, searchMap, "bookkeeping.json")
 
 #main check
 if __name__ == "__main__":
