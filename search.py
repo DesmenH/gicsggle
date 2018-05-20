@@ -30,14 +30,9 @@ def searchDict(term, dict, addressMap, kvalue):
             if counter == kvalue:
                 break
     else:
-        printUnfound()
-     
-def printUnfound():
         print "Your search - %s - did not match any documents." % term
         print "\n Suggestions: \n"
         print "  - Make sure all words are spelled correctly."
         print "  - Try different keywords."
         print "  - Try more general keywords."
         print "  - Try fewer keywords."
-
-
