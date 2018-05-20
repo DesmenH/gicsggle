@@ -8,12 +8,12 @@ from collections import defaultdict
 #query given by user
 query = ''
 indexDic = defaultdict(list)
+mergedList = []
 loopCounter = 0
 
 #path for windows, comment this and create new path for mac
-bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
-#bookkeepingPath = '/Users/wang/Desktop/2018 Spring/CS 121 Information Retrieval/Homework/Assignment 3/' \
-#                 'gicsggle/WEBPAGES_RAW/'
+#bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
+bookkeepingPath = '/Users/wang/Desktop/2018 Spring/CS 121 Information Retrieval/Homework/Assignment 3/WEBPAGES_RAW/'
 
 #reading from bookkeeping json
 with open(bookkeepingPath + 'bookkeeping.json', 'r') as f:
@@ -41,7 +41,7 @@ for key in bookkeeping:
 
         #remove punctuation
         translate_table = dict((ord(char), None) for char in string.punctuation)
-        words = words.translate(translate_table)
+        words = words.translate(translate_table).lower()
 
         #tokenization
         tokens = [t for t in words.split()]
@@ -55,11 +55,19 @@ for key in bookkeeping:
 
         print currentPath
 
-        if loopCounter == 1:
+        if loopCounter == 2000:
         	break
         html_file.close()
 
     f.close()
+
+tokenNumber = len(indexDic.keys())
+
+print ('a. Number of documents of the corpus: ' + str(loopCounter))
+print ('b. Number of [unique] tokens present in the index: ' + str(tokenNumber))
+print ('c. The total size (in KB) of index on disk: ' + 'manually check')
+
+
 
 #create an output file: dictionary.json
 #dictionary.json will be the dictionary we search from
