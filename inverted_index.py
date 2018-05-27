@@ -89,6 +89,9 @@ outputCount = 0
 foldernumber = 0
 plDirectory = {}
 
+if not os.path.exists('../gicsggle/PostingList'):
+    os.makedirs('../gicsggle/PostingList')
+
 for term in indexDic:
     #status bar
     if outputCount%250 == 0:
@@ -99,7 +102,8 @@ for term in indexDic:
         foldernumber += 1
         path = '/%s' % foldernumber
         path = plPath + path
-    
+
+    #make a new folder if it doesn't exist already
     if not os.path.exists(path):
         os.makedirs(path)
 
@@ -111,6 +115,7 @@ for term in indexDic:
     plDirectory[term] = path
     outputCount += 1
 
+#create a posting list bookkeeping json that will be used for searching
 with open('plBookkeeping.json', 'w+') as output:
     json.dump(plDirectory, output, indent=4, sort_keys=True)
     output.close()
@@ -135,8 +140,6 @@ for term in indexDic:
 with open('idf.json', 'w+') as output:
     json.dump(idfDic, output, indent=4, sort_keys=True)
     output.close()
-
-
 
 
 #------old code------
