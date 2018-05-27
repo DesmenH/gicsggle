@@ -7,6 +7,7 @@ from collections import defaultdict
 import os #used to store in PostingList Folder
 import math #used for tf-idf
 import search
+from collections import Counter
 
 #query given by user
 query = ''
@@ -34,7 +35,6 @@ for key in bookkeeping:
     print key
     loopCounter += 1
     #traversing data  (key = key | bookkeeping[key] = value)
-    #print "key: %s , value: %s" % (key, bookkeeping[key]) 
     currentPath = bookkeepingPath + key
     url = searchMap[key]
 
@@ -49,33 +49,34 @@ for key in bookkeeping:
         translate_table = dict((ord(char), None) for char in string.punctuation)
         words = words.translate(translate_table).lower() #lowercase
 
-        #remove non-ascii characters
-        words = "".join(nonascii for nonascii in words if ord(nonascii)<128)
-
         #tokenization
         tokens = [t for t in words.split()]
 
         #remove tokens with too many characters
         #longest word in english dictionary is 45 characters
         tokens = [longword for longword in tokens if len(longword) <= 45]
-        
+
+        for term in tokens:
+            if all(ord(c) < 128 for c in term) == False:
+                tokens.remove(term)
+
+        #count occurences in tokens and store in tfDict
+        tfDict = dict(Counter(tokens))
+
         #push into indexDic
         for t in tokens:
        	    #indexDic  KEY = signal token(path to data) | VALUE = key in bookkeeping(ex:13/481) -> term freq
             if len([keytfpair for keytfpair in indexDic[t] if keytfpair[0] == url]) == 0:
-                #counting number of times each term occurs in document
-                tf = tokens.count(t)
-
                 #calculate weight tf-score 
                 #tf-score = 1+log10(tf of term for a particular document)
-                tf = 1 + math.log10(tf)
+                tf = 1 + math.log10(tfDict[t])
 
                 #create a dict of key->term freq
                 keywithtf = (url, tf)
                 indexDic[t].append(keywithtf)
 
-        if loopCounter == 1:
-        	break
+        #if loopCounter == 1:
+        	#break
         html_file.close()
 
 tokenNumber = len(indexDic.keys())
@@ -85,42 +86,61 @@ print ('a. Number of documents of the corpus: ' + str(loopCounter))
 print ('b. Number of [unique] tokens present in the index: ' + str(tokenNumber))
 print ('c. The total size (in KB) of index on disk: ' + 'manually check')
 
-outputCount = 0
+outputCount = 1
 foldernumber = 0
 plDirectory = {}
 
 if not os.path.exists('../gicsggle/PostingList'):
     os.makedirs('../gicsggle/PostingList')
 
+#for term in indexDic:
+#    #status bar
+#    if outputCount%15000 == 0:
+#        print "working on file %s/%d" % (outputCount, tokenNumber)
+
+#    #create a new file for every 500 term
+#    if outputCount % 500 == 0:
+#        foldernumber += 1
+#        path = '/%s' % foldernumber
+#        path = plPath + path
+
+#    #make a new folder if it doesn't exist already
+#    if not os.path.exists(path):
+#        os.makedirs(path)
+
+#    filename = str(outputCount) + '.json'
+#    with open(os.path.join(path, filename), 'w+') as output:
+#        json.dump(indexDic[term], output, indent=4)
+#        output.close()
+
+#    plDirectory[term] = path
+#    outputCount += 1
+
+filecount = 1
+seperatedIndex = {}
 for term in indexDic:
     #status bar
-    if outputCount%250 == 0:
+    if outputCount%20000 == 0:
         print "working on file %s/%d" % (outputCount, tokenNumber)
 
-    #create a new file for every 500 term
-    if outputCount % 500 == 0:
-        foldernumber += 1
-        path = '/%s' % foldernumber
-        path = plPath + path
+    seperatedIndex[term] = indexDic[term]
 
-    #make a new folder if it doesn't exist already
-    if not os.path.exists(path):
-        os.makedirs(path)
+    #create a new file for every 5000 term
+    if outputCount % 15000 == 0:
+        filename = str(filecount) + '.json'
+        with open(os.path.join(plPath, filename), 'w+') as output:
+            json.dump(seperatedIndex, output, indent=4)
+            seperatedIndex.clear()
+            filecount += 1
+            output.close()
 
-    filename = str(outputCount) + '.json'
-    with open(os.path.join(path, filename), 'w+') as output:
-        json.dump(indexDic[term], output, indent=4)
-        output.close()
-
-    plDirectory[term] = path
+    plDirectory[term] = str(filecount) + '.json'
     outputCount += 1
 
 #create a posting list bookkeeping json that will be used for searching
 with open('plBookkeeping.json', 'w+') as output:
     json.dump(plDirectory, output, indent=4, sort_keys=True)
     output.close()
-
-
 
 #create an output file: dictionary.json
 #dictionary.json will be the dictionary we search from
@@ -153,6 +173,13 @@ with open('idf.json', 'w+') as output:
     #for paragraph in soup.find_all('li'):
     #    words = paragraph.text
     #    print >> output, words.encode('utf-8')
+
+#tokens = [nonascii for nonascii in tokens if (all(ord(c) < 128 for c in nonascii) == True)]
+#print "key: %s , value: %s" % (key, bookkeeping[key]) 
+
+#difficult to deal with file
+#key = '39/373'
+
 
 
 
