@@ -4,6 +4,7 @@ import sys
 import nltk #tokenizer
 import string
 from collections import defaultdict
+import os.path #used to store in PostingList Folder
 
 #query given by user
 query = ''
@@ -44,6 +45,10 @@ for key in bookkeeping:
 
         #tokenization
         tokens = [t for t in words.split()]
+
+        #remove tokens with too many characters
+        #longest word in english dictionary is 45 characters
+        tokens = [longword for longword in tokens if len(longword) < 50]
 
         #push into indexDic
         for t in tokens:
