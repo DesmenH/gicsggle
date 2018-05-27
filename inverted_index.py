@@ -5,6 +5,7 @@ import nltk #tokenizer
 import string
 from collections import defaultdict
 import os.path #used to store in PostingList Folder
+import math #used for tf-idf
 
 #query given by user
 query = ''
@@ -48,13 +49,22 @@ for key in bookkeeping:
 
         #remove tokens with too many characters
         #longest word in english dictionary is 45 characters
-        tokens = [longword for longword in tokens if len(longword) < 50]
+        tokens = [longword for longword in tokens if len(longword) <= 45]
+
+        #counting number of times each term occurs in document
+        
+
+
 
         #push into indexDic
         for t in tokens:
-        	#indexDic  KEY = signal token | VALUE = key in bookkeeping(ex:13/481)
-            if key not in indexDic[t]:
-                indexDic[t].append(key)
+            #create a dict of key->term freq
+            tf = tokens.count(t)
+            keywithtf = {key:tf}
+
+       	    #indexDic  KEY = signal token(path to data) | VALUE = key in bookkeeping(ex:13/481) -> term freq
+            if keywithtf not in indexDic[t]:
+                indexDic[t].append(keywithtf)
 
         if loopCounter == 1:
         	break
@@ -73,10 +83,18 @@ with open('dictionary.json', 'w+') as output:
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
 
+#creating a dictionary of term->idf weight
+#idf weight = log10(# of document in corpus / # of time the term showed up)
+idfDic = {}
+for term in indexDic:
+    #print "%s : %d" % (term, len(indexDic[term]))
+    idf = math.log10(loopCounter / len(indexDic[term]))
+    idfDic[term] = idf
 
-
-
-
+#output the idfDic as a json
+with open('idf.json', 'w+') as output:
+    json.dump(idfDic, output, indent=4, sort_keys=True)
+    output.close()
 
 
 
