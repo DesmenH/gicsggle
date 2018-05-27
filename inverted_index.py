@@ -30,11 +30,6 @@ for key in bookkeeping:
     #open html file using key of bookkeeping (map)
     with open(currentPath, 'r') as html_file:
         soup = bs.BeautifulSoup(html_file, 'lxml')
-        
-    #//read words inside <li> tag in html file
-        #for paragraph in soup.find_all('li'):
-        #    words = paragraph.text
-        #    print >> output, words.encode('utf-8')
 
         #read all words in html file
         words = soup.text
@@ -52,8 +47,8 @@ for key in bookkeeping:
             if key not in indexDic[t]:
                 indexDic[t].append(key)
 
-        if loopCounter == 2000:
-        	break
+        #if loopCounter == 1:
+        	#break
     html_file.close()
 f.close()
 
@@ -64,14 +59,11 @@ print ('a. Number of documents of the corpus: ' + str(loopCounter))
 print ('b. Number of [unique] tokens present in the index: ' + str(tokenNumber))
 print ('c. The total size (in KB) of index on disk: ' + 'manually check')
 
-
-
 #create an output file: dictionary.json
 #dictionary.json will be the dictionary we search from
 with open('dictionary.json', 'w+') as output:
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
-
 
 
 #------old code------
@@ -80,6 +72,11 @@ with open('dictionary.json', 'w+') as output:
     #print >> output, (a,':',indexDic[a])
     #index = "%s , %s" % (a, indexDic[a])
     #print >> output, (index.encode('utf-8'))
+
+#//read words inside <li> tag in html file
+    #for paragraph in soup.find_all('li'):
+    #    words = paragraph.text
+    #    print >> output, words.encode('utf-8')
 
 
 
