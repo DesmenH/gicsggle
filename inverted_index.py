@@ -50,20 +50,18 @@ for key in bookkeeping:
         #remove tokens with too many characters
         #longest word in english dictionary is 45 characters
         tokens = [longword for longword in tokens if len(longword) <= 45]
-
-        #counting number of times each term occurs in document
         
-
-
-
         #push into indexDic
         for t in tokens:
-            #create a dict of key->term freq
-            tf = tokens.count(t)
-            keywithtf = {key:tf}
-
        	    #indexDic  KEY = signal token(path to data) | VALUE = key in bookkeeping(ex:13/481) -> term freq
-            if keywithtf not in indexDic[t]:
+            if len([keytfpair for keytfpair in indexDic[t] if keytfpair[0] == key]) == 0:
+                #counting number of times each term occurs in document
+                tf = tokens.count(t)
+                #calculate weight tf-score 
+                #tf-score = 1+log10(tf of term for a particular document)
+                tf = 1 + math.log10(tf)
+                #create a dict of key->term freq
+                keywithtf = (key, tf)
                 indexDic[t].append(keywithtf)
 
         if loopCounter == 1:
