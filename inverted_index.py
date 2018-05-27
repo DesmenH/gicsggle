@@ -18,6 +18,7 @@ bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
 #reading from bookkeeping json
 with open(bookkeepingPath + 'bookkeeping.json', 'r') as f:
     bookkeeping = json.load(f)  #data is a dict with [keys = file num | value = url]
+    f.close()
 
 #go through bookkeeping dict as guide for tokenizing htmls
 for key in bookkeeping:
@@ -38,6 +39,9 @@ for key in bookkeeping:
         translate_table = dict((ord(char), None) for char in string.punctuation)
         words = words.translate(translate_table).lower() #lowercase
 
+        #remove non-ascii characters
+        words = "".join(nonascii for nonascii in words if ord(nonascii)<128)
+
         #tokenization
         tokens = [t for t in words.split()]
 
@@ -47,10 +51,9 @@ for key in bookkeeping:
             if key not in indexDic[t]:
                 indexDic[t].append(key)
 
-        #if loopCounter == 1:
-        	#break
-    html_file.close()
-f.close()
+        if loopCounter == 1:
+        	break
+        html_file.close()
 
 tokenNumber = len(indexDic.keys())
 
@@ -64,6 +67,12 @@ print ('c. The total size (in KB) of index on disk: ' + 'manually check')
 with open('dictionary.json', 'w+') as output:
     json.dump(indexDic, output, indent=4, sort_keys=True)
     output.close()
+
+
+
+
+
+
 
 
 #------old code------
