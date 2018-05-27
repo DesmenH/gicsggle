@@ -4,8 +4,9 @@ import sys
 import nltk #tokenizer
 import string
 from collections import defaultdict
-import os.path #used to store in PostingList Folder
+import os #used to store in PostingList Folder
 import math #used for tf-idf
+import search
 
 #query given by user
 query = ''
@@ -16,6 +17,12 @@ loopCounter = 0
 #path for windows, comment this and create new path for mac
 bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
 #bookkeepingPath = '/Users/wang/Desktop/2018 Spring/CS 121 Information Retrieval/Homework/Assignment 3/WEBPAGES_RAW/'
+
+#path for posting list
+plPath = '../gicsggle/PostingList'
+
+#loading searchMap
+searchMap = search.loadDict("bookkeeping.json")
 
 #reading from bookkeeping json
 with open(bookkeepingPath + 'bookkeeping.json', 'r') as f:
@@ -29,6 +36,7 @@ for key in bookkeeping:
     #traversing data  (key = key | bookkeeping[key] = value)
     #print "key: %s , value: %s" % (key, bookkeeping[key]) 
     currentPath = bookkeepingPath + key
+    url = searchMap[key]
 
     #open html file using key of bookkeeping (map)
     with open(currentPath, 'r') as html_file:
@@ -54,14 +62,16 @@ for key in bookkeeping:
         #push into indexDic
         for t in tokens:
        	    #indexDic  KEY = signal token(path to data) | VALUE = key in bookkeeping(ex:13/481) -> term freq
-            if len([keytfpair for keytfpair in indexDic[t] if keytfpair[0] == key]) == 0:
+            if len([keytfpair for keytfpair in indexDic[t] if keytfpair[0] == url]) == 0:
                 #counting number of times each term occurs in document
                 tf = tokens.count(t)
+
                 #calculate weight tf-score 
                 #tf-score = 1+log10(tf of term for a particular document)
                 tf = 1 + math.log10(tf)
+
                 #create a dict of key->term freq
-                keywithtf = (key, tf)
+                keywithtf = (url, tf)
                 indexDic[t].append(keywithtf)
 
         if loopCounter == 1:
@@ -74,6 +84,38 @@ tokenNumber = len(indexDic.keys())
 print ('a. Number of documents of the corpus: ' + str(loopCounter))
 print ('b. Number of [unique] tokens present in the index: ' + str(tokenNumber))
 print ('c. The total size (in KB) of index on disk: ' + 'manually check')
+
+outputCount = 0
+foldernumber = 0
+plDirectory = {}
+
+for term in indexDic:
+    #status bar
+    if outputCount%250 == 0:
+        print "working on file %s/%d" % (outputCount, tokenNumber)
+
+    #create a new file for every 500 term
+    if outputCount % 500 == 0:
+        foldernumber += 1
+        path = '/%s' % foldernumber
+        path = plPath + path
+    
+    if not os.path.exists(path):
+        os.makedirs(path)
+
+    filename = str(outputCount) + '.json'
+    with open(os.path.join(path, filename), 'w+') as output:
+        json.dump(indexDic[term], output, indent=4)
+        output.close()
+
+    plDirectory[term] = path
+    outputCount += 1
+
+with open('plBookkeeping.json', 'w+') as output:
+    json.dump(plDirectory, output, indent=4, sort_keys=True)
+    output.close()
+
+
 
 #create an output file: dictionary.json
 #dictionary.json will be the dictionary we search from
@@ -93,6 +135,7 @@ for term in indexDic:
 with open('idf.json', 'w+') as output:
     json.dump(idfDic, output, indent=4, sort_keys=True)
     output.close()
+
 
 
 
