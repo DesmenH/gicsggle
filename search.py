@@ -1,4 +1,5 @@
 import json
+import os
 from collections import OrderedDict #used to import orderedDict
 
 #input: json file with dictionary
@@ -9,22 +10,23 @@ def loadDict(inputDictPath):
         dict.close()
         return searchMap
 
-def searchDict(term, dict, addressMap, kvalue):
+def searchDict(term, dict, pathToPostingList, kvalue):
     if term in dict:
-        addressList = dict[term]  #addressList is a list of all address from bookkeeping
+        addressLoc = dict[term]  #addressLoc is a list of all address from bookkeeping
+        path = os.path.join(pathToPostingList, addressLoc)
 
-        #open bookkeeping to search for url
-        with open(addressMap, 'r') as bookkeeping_file:
-            addressDict = json.load(bookkeeping_file, object_pairs_hook = OrderedDict)
+        #open file in PostingList folder containing term info
+        with open(path, 'r') as bookkeeping_file:
+            termDict = json.load(bookkeeping_file, object_pairs_hook = OrderedDict)
             bookkeeping_file.close()
         
         #traverse list of paths found -> inside bookkeeping.json
-        print ("%s results found") % len(addressList)
+        print ("%s results found") % len(termDict[term])
         print ("%s results shown \n") % kvalue
         
         counter = 0
-        for address in addressList:
-            print (addressDict[address])
+        for i in termDict[term]:
+            print (i[0])
             print (" ")
             counter += 1
             if counter == kvalue:

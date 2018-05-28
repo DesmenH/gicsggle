@@ -147,9 +147,9 @@ with open('plBookkeeping.json', 'w+') as output:
 
 #create an output file: dictionary.json
 #dictionary.json will be the dictionary we search from
-with open('dictionary.json', 'w+') as output:
-    json.dump(indexDic, output, indent=4, sort_keys=True)
-    output.close()
+#with open('dictionary.json', 'w+') as output:
+#    json.dump(indexDic, output, indent=4, sort_keys=True)
+#    output.close()
 
 #creating a dictionary of term->idf weight
 #idf weight = log10(# of document in corpus / # of time the term showed up)
