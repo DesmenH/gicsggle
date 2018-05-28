@@ -55,10 +55,11 @@ for key in bookkeeping:
         #remove tokens with too many characters
         #longest word in english dictionary is 45 characters
         tokens = [longword for longword in tokens if len(longword) <= 45]
+        tokens = [nonascii for nonascii in tokens if (all(ord(c) < 128 for c in nonascii) == True)]
 
-        for term in tokens:
-            if all(ord(c) < 128 for c in term) == False:
-                tokens.remove(term)
+        #for term in tokens <-- might be faster but only deletes 1 i think:
+        #    if all(ord(c) < 128 for c in term) == False:
+        #        tokens.remove(term)
 
         #count occurences in tokens and store in tfDict
         tfDict = dict(Counter(tokens))
@@ -121,13 +122,13 @@ seperatedIndex = {}
 for term in indexDic:
     #status bar
     if outputCount%20000 == 0:
-        print "working on file %s/%d" % (outputCount, tokenNumber)
+        print "writing to posting list %s/%d" % (outputCount, tokenNumber)
 
     seperatedIndex[term] = indexDic[term]
 
     #create a new file for every 5000 term
-    if outputCount % 15000 == 0:
-        filename = str(filecount) + '.json'
+    if outputCount % 2000 == 0:
+        filename = str(filecount)
         with open(os.path.join(plPath, filename), 'w+') as output:
             json.dump(seperatedIndex, output, indent=4)
             seperatedIndex.clear()
