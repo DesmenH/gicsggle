@@ -21,6 +21,8 @@ bookkeepingPath = '../gicsggle/Database/WEBPAGES/WEBPAGES_RAW/'
 
 #path for posting list
 plPath = '../gicsggle/PostingList'
+if not os.path.exists(plPath):
+    os.makedirs(plPath)
 
 #loading searchMap
 searchMap = search.loadDict("bookkeeping.json")
